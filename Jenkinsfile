@@ -1,12 +1,15 @@
 #!groovy
+latest = "1.16.154"
+stable = "1.16.154"
+
 properties([
   parameters([
-    string(defaultValue: '1.16.154', description: 'Aws Version', name: 'AwsVersion')
+    string(defaultValue: '1.16.154', description: 'Version', name: 'Version')
   ])
 ])
 
 node {
-  awsVersion = params.AwsVersion
+  awsVersion = params.Version
   credentialsId = 'docker-hub-credentials'
 
   stage('clone') {
@@ -26,6 +29,10 @@ node {
   stage('publish') {
     docker.withRegistry("", credentialsId) {
       image.push()
+      if (awsVersion == latest)
+        image.push('latest')
+      else if (awsVersion == stable)
+        image.push('stable')
     }
   }
 }

@@ -31,7 +31,7 @@ node {
       image.push()
       if (awsVersion == latest)
         image.push('latest')
-      else if (awsVersion == stable)
+      if (awsVersion == stable)
         image.push('stable')
     }
   }
